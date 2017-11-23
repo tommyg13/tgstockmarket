@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const port = process.env.PORT;
 // const Promise = require("bluebird");
 // const mongoose = require("mongoose");
 // const dotenv = require("dotenv");
@@ -18,7 +19,7 @@ app.use(bodyParser.json());
 app.use(require("./routes/index")); 
 
 
-app.listen(8080,()=>{
+app.listen(port,()=>{
     console.log("server running");
 });
 
