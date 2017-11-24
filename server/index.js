@@ -2,25 +2,54 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const port = process.env.PORT;
-// const Promise = require("bluebird");
-// const mongoose = require("mongoose");
-// const dotenv = require("dotenv");
+const http = require("http");
+const Stock = require("./models/stocks");
+const Promise = require("bluebird");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-// dotenv.config();
+dotenv.config();
 const app = express();
-// mongoose.Promise = Promise;
-// mongoose.connect(process.env.MONGODB_URL,{useMongoClient:true},(err)=>{
-//     if(err) console.log(err);
-//     else console.log("connected to db");
-// });
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+mongoose.Promise = Promise;
+
+mongoose.connect(process.env.MONGOLAB_URI,{useMongoClient:true},(err)=>{
+    if(err) console.log(err);
+    else console.log("connected to db");
+});
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require("./routes/index")); 
 
+app.io = io;
+// io.on("connection", socket => {
+//   console.log("New client connected");
+//   setInterval(renderData,300);
+//   function renderData() {
+//     Stock.find({})
+//         .then(stocks=>{
+//             socket.emit("stocks",stocks);
+//         })
+//   }
+//   socket.on("disconnect", () => console.log("Client disconnected"));
+// });
+// io.on("connection", socket => {
+//   console.log("New client connected");
+//   setInterval(renderData,300);
+//   function renderData() {
+//     Stock.find({})
+//         .then(stocks=>{
+//             socket.emit("stocks",stocks);
+//         })
+//   }
+//   socket.on("disconnect", () => console.log("Client disconnected"));
+// });
 
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log("server running");
 });
 
-module.exports = app;
+module.exports = server;
