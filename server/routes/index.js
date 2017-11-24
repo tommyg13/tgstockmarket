@@ -27,7 +27,9 @@ router.post("/addNew",(req,res)=>{
         //send request to quandl with requested stock
             let today = (new Date).toLocaleDateString().split("/");
             let formattedDate = today[2]+"-"+today[0]+"-"+today[1];
-     axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${stock}.json?column_index=4&start_date=2015-01-01&end_date=${formattedDate}"&api_key=${process.env.QUANDL_KEY}`)
+            let url=`https://www.quandl.com/api/v3/datasets/WIKI/${stock}.json?api_key=${process.env.QUANDL_KEY}`;
+            console.log(url);
+     axios.get()
           .then(response=>{
               let newStock = new Stock;
               const { data, name, id} = response.data.dataset;
