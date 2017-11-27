@@ -7,5 +7,5 @@ export default {
     fetch: () =>
             axios.post(`https://${host}/fetcStocks`).then(res => res.data.stocks),
     deleteStock: id =>
-            axios.delete(`https://tgstockmarket-gkazikas.c9users.io/remove/${ id }`).then(res => res.data)             
+            axios.delete(`https://${host}/remove/${ id }`).then(res => res.data)             
 };
