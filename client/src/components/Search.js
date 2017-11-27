@@ -7,35 +7,41 @@ class Search extends React.Component {
     
     state={
         data:"",
-        error: ""
+        error: "",
+        disabled: true
     }
     
     handleChange = e => {
-        this.setState({data:e.target.value});
+        this.setState({data:e.target.value,error:"",disabled:false});
     }
     
     handleSubmit = e => {
         e.preventDefault();
         const { data }= this.state;
         //don't send the request if the input is empty
-        return !data ? this.setState({error:"Can't be blank"}) :
+        this.setState({disabled:true,error:""});
+        return !data.trim() ? this.setState({error:"Can't be blank",disabled:false}) :
         // send request for adding new stock
         this.props.addStock(data)
-            .then(res=>res)
-            .catch(err=>this.setState({error:err.response.data.error}));
+            .then(res=>{
+                this.setState({disabled:false,data:""});
+                return res;
+            })
+            .catch(err=>this.setState({error:err.response.data.error,disabled:false}));
     }
     
     render() {
-        const { data, error } = this.state;
+        const { data, error, disabled } = this.state;
             return(
                 <div className="stockItem add">
                     <form onSubmit={this.handleSubmit}>
+                    <div className="messages">
+                            { error && <span>{error}</span> }                    
+                    </div>
                         <div>
-                            <label htmlFor="stock">Add new stock</label>
-                            <input name="stock" id="stock" onChange={this.handleChange} value={data}/>
-                            { error && <span>{error}</span> }
+                            <input name="stock" id="stock" onChange={this.handleChange} value={data} placeholder="Add new stock"/>
                         </div>
-                        <button type="submit">Add</button>
+                        <div><button type="submit" disabled={disabled}>Add</button></div>
                     </form>
                 </div>
             );

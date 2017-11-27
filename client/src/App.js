@@ -1,42 +1,59 @@
 import React, { Component } from 'react';
-import './App.css';
 import openSocket from 'socket.io-client';
 import Search from "./components/Search";
 import Stocks from "./components/Stocks";
-import { fetcStocks } from "./actions/stock";
 import { connect } from "react-redux";
+import Chart from "./components/Chart";
 
 // const  socket = openSocket("https://tgstockmarket-gkazikas.c9users.io");
 const  socket = openSocket();
 class App extends Component {
-      state= {
-        dataset: [],
-        text: ""
-      }
-       
-      componentDidMount() {
-         this.setState({text:"loading"});
-      this.props.fetcStocks().then(res=> {
-          return this.setState({dataset:res.data,text:""});
-      });
-       socket.on("stocks",res=>{
-         this.setState({
-           dataset:res
-         });
-       });
+    constructor(props) {
+        super(props);
+          this.state= {
+            dataset: [],
+            text: "loading"
+          };
+}
+    componentWillReceiveProps(nextProps) {
+        this.setState({dataset:nextProps.stocks,text:""});
+           socket.on("stocks",res=>{
+               "true"
+             this.setState({
+               dataset:res
+             });
+           });
     }
-    
+
   render() {
+      const { text, dataset } = this.state;
     return (
       <div className="App">
-        <div className="stocks">
-        <p>{this.state.text}</p>
+      {text ? <div className="loading">
+            <span id="bubblingG_1">
+        	</span>
+        	<span id="bubblingG_2">
+        	</span>
+        	<span id="bubblingG_3">
+        	</span>      
+      </div>:
+        <div className="stocksCont">
+            {dataset.length > 0 &&<Chart dataset={dataset}/>}
+          <div className="stocks">
           <Search />
-          <Stocks data={this.state.dataset}/>
+          <Stocks data={dataset}/>
+          </div>
         </div>
+      }
       </div>
     );
   }
 }
 
-export default connect(null,{fetcStocks})(App);
+function mapStateToProps(state) {
+    return {
+        stocks: state
+    };
+}
+
+export default connect(mapStateToProps)(App);

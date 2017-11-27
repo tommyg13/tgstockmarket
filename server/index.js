@@ -25,28 +25,6 @@ app.use(bodyParser.json());
 app.use(require("./routes/index")); 
 
 app.io = io;
-// io.on("connection", socket => {
-//   console.log("New client connected");
-//   setInterval(renderData,300);
-//   function renderData() {
-//     Stock.find({})
-//         .then(stocks=>{
-//             socket.emit("stocks",stocks);
-//         })
-//   }
-//   socket.on("disconnect", () => console.log("Client disconnected"));
-// });
-// io.on("connection", socket => {
-//   console.log("New client connected");
-//   setInterval(renderData,300);
-//   function renderData() {
-//     Stock.find({})
-//         .then(stocks=>{
-//             socket.emit("stocks",stocks);
-//         })
-//   }
-//   socket.on("disconnect", () => console.log("Client disconnected"));
-// });
 
 server.listen(port,()=>{
     console.log("server running");
