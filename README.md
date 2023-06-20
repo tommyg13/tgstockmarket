@@ -1,1 +1,1 @@
-url --> https://tgstockmarket.herokuapp.com/
+https://tgstockmarket.herokuapp.com/
